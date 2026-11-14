@@ -17,8 +17,8 @@ namespace 俄罗斯方块
     internal class Game
     {
         //窗口宽高
-        public static int Width = 50;
-        public static int Height = 35;
+        public static int Width = 46;
+        public static int Height = 30;
         public const int originTimeDelay = 333; //延时333毫秒
         public static int timeDelay = originTimeDelay;
 

@@ -14,7 +14,7 @@ namespace 俄罗斯方块
         public static int sec = 0;
         public static void ScoreUpdate()
         {
-            Console.SetCursorPosition(32, 31);
+            Console.SetCursorPosition(28, 25);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"分数：{score}");
         }
@@ -27,10 +27,10 @@ namespace 俄罗斯方块
             }
             else
                 sec++;
-            Console.SetCursorPosition(10, 31);
+            Console.SetCursorPosition(6, 25);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("游戏时间：");
-            Console.SetCursorPosition(20, 31);
+            Console.SetCursorPosition(16, 25);
             Console.WriteLine($"{min:D2}:{sec:D2}");
         }
     }

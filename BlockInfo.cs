@@ -11,6 +11,7 @@ namespace 俄罗斯方块
     {
         //方块方向及坐标信息容器
         private List<Position[]> dir;
+        public int dirCount = 4;
 
         public BlockInfo(E_DrawObjectType type)
         {

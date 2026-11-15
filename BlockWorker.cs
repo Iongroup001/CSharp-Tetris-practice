@@ -11,6 +11,7 @@ namespace 俄罗斯方块
         private List<DrawObject> blocks;
         private Dictionary<E_DrawObjectType, BlockInfo> blockInfo;
         private ConsoleColor color;
+        private int currentIndex;
 
         public BlockWorker()
         {
@@ -50,9 +51,10 @@ namespace 俄罗斯方块
 
             // 随机选择一个方向，并获取其对应的位置信息
             int index = random.Next(0, blocks.Count);
+            currentIndex = index;
             BlockInfo nowBlockInfo = blockInfo[type];
-            Position[] positions = nowBlockInfo[index];
-            for (int i = 0; i < nowBlockInfo[index].Length; i++)
+            Position[] positions = nowBlockInfo[currentIndex];
+            for (int i = 0; i < nowBlockInfo[currentIndex].Length; i++)
             {
                 blocks[i + 1].pos = blocks[0].pos + positions[i];
             }
@@ -70,6 +72,64 @@ namespace 俄罗斯方块
                 color = ConsoleColor.Red;
             }
             return color;
+        }
+
+        // 擦除方块
+        public void removeLastBlock()
+        {
+            foreach (var block in blocks)
+            {
+                Console.SetCursorPosition(block.pos.X, block.pos.Y);
+                Console.Write("  ");
+            }
+        }
+
+        // 方块向左转向
+        public void LeftRotate()
+        {
+            // 先擦除上一次的方块
+            removeLastBlock();
+
+            E_DrawObjectType type = blocks[0].type;
+            BlockInfo nowBlockInfo = blockInfo[type];
+
+            // 计算上一个方向的索引
+            int prevIndex = currentIndex - 1 < 0 ? nowBlockInfo.dirCount - 1 : currentIndex - 1;
+            currentIndex = prevIndex;
+            // 获取上一个方向的位置信息
+            Position[] prevPositions = nowBlockInfo[prevIndex];
+            // 更新方块的位置
+            for (int i = 0; i < prevPositions.Length; i++)
+            {
+                blocks[i + 1].pos = blocks[0].pos + prevPositions[i];
+            }
+
+            // 重新绘制方块
+            Draw();
+        }
+
+        // 方块向右转向
+        public void RightRotate()
+        {
+            // 先擦除上一次的方块
+            removeLastBlock();
+
+            E_DrawObjectType type = blocks[0].type;
+            BlockInfo nowBlockInfo = blockInfo[type];
+
+            // 计算下一个方向的索引
+            int nextIndex = (currentIndex + 1) % nowBlockInfo.dirCount;
+            currentIndex = nextIndex;
+            // 获取下一个方向的位置信息
+            Position[] nextPositions = nowBlockInfo[nextIndex];
+            // 更新方块的位置
+            for (int i = 0; i < nextPositions.Length; i++)
+            {
+                blocks[i + 1].pos = blocks[0].pos + nextPositions[i];
+            }
+
+            // 重新绘制方块
+            Draw();
         }
     }
 }

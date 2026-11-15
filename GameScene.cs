@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,41 @@ namespace 俄罗斯方块
 
             // 初始化方块生成器
             blockWorker = new BlockWorker();
+
+            // 订阅事件
+            InputThread.Instance.inputEvent += InputCheckThread;
         }
+
+        // 输入检测线程
+        public void InputCheckThread()
+        {
+            if (Console.KeyAvailable)
+            {
+                lock (this)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.Q:
+                            blockWorker.LeftRotate();
+                            break;
+                        case ConsoleKey.E:
+                            blockWorker.RightRotate();
+                            break;
+                    }
+                }
+            }
+        }
+
         public void Update()
         {
-            map.Draw();
-            blockWorker.Draw();
+            lock (this)
+            {
+                map.Draw();
+                blockWorker.Draw();
+            }
+
+            Thread.Sleep(333);
         }
     }
 }

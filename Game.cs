@@ -47,26 +47,15 @@ namespace 俄罗斯方块
                 //更新场景
                 if (nowScene != null)
                     nowScene.Update();
-                //延时
-                System.Threading.Thread.Sleep(timeDelay);
-                //加快游戏速度
-                if (Information.score <= 200)
-                {
-                    if (Information.score == 80)
-                        timeDelay = 250;
-                    else if (Information.score == 200)
-                        timeDelay = 200;
-                }
-
 
                 //更新计时器
-                if (Timer.ElapsedMilliseconds - Information.lastTime >= 1000)
+                /*if (Timer.ElapsedMilliseconds - Information.lastTime >= 1000)
                 {
                     Information.timeUpdate();
                     Information.lastTime = Timer.ElapsedMilliseconds;
                 }
 
-                Information.ScoreUpdate();
+                Information.ScoreUpdate();*/
             }
         }
 

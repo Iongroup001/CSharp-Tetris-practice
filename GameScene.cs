@@ -41,10 +41,20 @@ namespace 俄罗斯方块
                     switch (keyInfo.Key)
                     {
                         case ConsoleKey.Q:
-                            blockWorker.LeftRotate();
+                            if (blockWorker.CanLeftRotate(map))
+                                blockWorker.LeftRotate();
                             break;
                         case ConsoleKey.E:
-                            blockWorker.RightRotate();
+                            if (blockWorker.CanLeftRotate(map))
+                                blockWorker.RightRotate();
+                            break;
+                        case ConsoleKey.A:
+                            if (blockWorker.CanLeftMove(map))
+                                blockWorker.LeftMove();
+                            break;
+                        case ConsoleKey.D:
+                            if (blockWorker.CanRighttMove(map))
+                                blockWorker.RightMove();
                             break;
                     }
                 }

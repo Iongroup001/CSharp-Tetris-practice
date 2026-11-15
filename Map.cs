@@ -29,7 +29,7 @@ namespace 俄罗斯方块
         //地图周围的墙壁
         private List<DrawObject> wall = new List<DrawObject>();
         //地图中已经固定的方块
-        private List<DrawObject> fixedBlocks = new List<DrawObject>();
+        public List<DrawObject> fixedBlocks = new List<DrawObject>();
 
         public void Draw()
         {

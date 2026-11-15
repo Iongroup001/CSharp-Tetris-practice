@@ -10,7 +10,6 @@ namespace 俄罗斯方块
     {
         Wall,
         FixedBlock,
-        Block,
         Line,
         Square,
         TShape,
@@ -22,9 +21,15 @@ namespace 俄罗斯方块
 
     internal class DrawObject : IDraw
     {
-        Position pos;
-        E_DrawObjectType type;
+        public Position pos;
+        public E_DrawObjectType type;
+        public ConsoleColor color;
 
+        public DrawObject(E_DrawObjectType drawObjectType)
+        {
+            pos = new Position(0, 0); // 默认位置为 (0, 0)
+            type = drawObjectType;
+        }
         public DrawObject(Position position, E_DrawObjectType drawObjectType)
         {
             pos = position;
@@ -45,29 +50,47 @@ namespace 俄罗斯方块
                 case E_DrawObjectType.FixedBlock:
                     // Draw FixedBlock
                     break;
-                case E_DrawObjectType.Block:
-                    // Draw Block
-                    break;
                 case E_DrawObjectType.Line:
                     // Draw Line
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.Square:
                     // Draw Square
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.TShape:
                     // Draw TShape
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.LShape:
                     // Draw LShape
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.JShape:
                     // Draw JShape
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.SShape:
                     // Draw SShape
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.ZShape:
                     // Draw ZShape
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = color;
+                    Console.Write("■");
                     break;
             }
         }

@@ -9,6 +9,7 @@ namespace 俄罗斯方块
     internal class GameScene : ISceneUpdate
     {
         private Map map;
+        private BlockWorker blockWorker;
 
         public GameScene()
         {
@@ -20,10 +21,14 @@ namespace 俄罗斯方块
 
             // 初始化地图
             map = new Map();
+
+            // 初始化方块生成器
+            blockWorker = new BlockWorker();
         }
         public void Update()
         {
             map.Draw();
+            blockWorker.Draw();
         }
     }
 }

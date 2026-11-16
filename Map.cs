@@ -24,6 +24,12 @@ namespace 俄罗斯方块
                 wall.Add(new DrawObject(new Position(leftEdge - 2, i), E_DrawObjectType.Wall));
                 wall.Add(new DrawObject(new Position(rightEdge, i), E_DrawObjectType.Wall));
             }
+
+            // 由于墙壁固定，故在初始化时就创建，节约性能
+            foreach (var item in wall)
+            {
+                item.Draw();
+            }
         }
 
         //地图周围的墙壁
@@ -33,10 +39,6 @@ namespace 俄罗斯方块
 
         public void Draw()
         {
-            foreach (var item in wall)
-            {
-                item.Draw();
-            }
             foreach (var item in fixedBlocks)
             {
                 item.Draw();

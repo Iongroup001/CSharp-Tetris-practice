@@ -49,6 +49,9 @@ namespace 俄罗斯方块
                     break;
                 case E_DrawObjectType.FixedBlock:
                     // Draw FixedBlock
+                    Console.SetCursorPosition(pos.X, pos.Y);
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write("■");
                     break;
                 case E_DrawObjectType.Line:
                     // Draw Line
@@ -93,6 +96,13 @@ namespace 俄罗斯方块
                     Console.Write("■");
                     break;
             }
+        }
+
+        // 擦除方块
+        public void ClearDraw()
+        {
+            Console.SetCursorPosition(pos.X, pos.Y);
+            Console.Write("  ");
         }
 
         // 方块类型的改变方法

@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace 俄罗斯方块
 {
-    // 变形类型枚举
-    public enum E_MoveType
-    {
-        left,
-        right,
-    }
-
     internal class BlockWorker : IDraw
     {
         private List<DrawObject> blocks;
         private Dictionary<E_DrawObjectType, BlockInfo> blockInfo;
         private ConsoleColor color;
         private int currentIndex;
+
+        // 定义向左的单位向量
+        Position left = new Position(-2, 0);
+        // 定义向右的单位向量
+        Position right = new Position(2, 0);
+        // 定义向下的单位向量
+        Position down = new Position(0, 1);
 
         public BlockWorker()
         {
@@ -30,6 +30,7 @@ namespace 俄罗斯方块
 
             GetRandomBlock();
             color = GetRandomColor();
+            Draw();
         }
 
         public void Draw()
@@ -84,10 +85,10 @@ namespace 俄罗斯方块
         // 擦除方块
         public void RemoveLastBlock()
         {
+            if (blocks == null) return;
             foreach (var block in blocks)
             {
-                Console.SetCursorPosition(block.pos.X, block.pos.Y);
-                Console.Write("  ");
+                block.ClearDraw();
             }
         }
 
@@ -107,15 +108,13 @@ namespace 俄罗斯方块
             if (blocks[0].pos.X < Map.leftEdge ||
                 blocks[0].pos.X >= Map.rightEdge ||
                 blocks[0].pos.Y > Map.bottomEdge) return false;
-            for (int i = 1; i < prevPositions.Length; i++)
+            for (int i = 0; i < prevPositions.Length; i++)
             {
                 if ((blocks[0].pos + prevPositions[i]).X < Map.leftEdge ||
                     (blocks[0].pos + prevPositions[i]).X >= Map.rightEdge ||
                     (blocks[0].pos + prevPositions[i]).Y > Map.bottomEdge) return false;
             }
-            for (int j = 0; j < map.fixedBlocks.Count; j++)
-                if (blocks[0].pos == map.fixedBlocks[j].pos) return false;
-            for (int i = 1; i < blocks.Count; i++)
+            for (int i = 0; i < prevPositions.Length; i++)
             {
                 for (int j = 0; j < map.fixedBlocks.Count; j++)
                 {
@@ -140,15 +139,13 @@ namespace 俄罗斯方块
             if (blocks[0].pos.X < Map.leftEdge ||
                 blocks[0].pos.X >= Map.rightEdge ||
                 blocks[0].pos.Y > Map.bottomEdge) return false;
-            for (int i = 1; i < nextPositions.Length; i++)
+            for (int i = 0; i < nextPositions.Length; i++)
             {
                 if ((blocks[0].pos + nextPositions[i]).X < Map.leftEdge ||
                     (blocks[0].pos + nextPositions[i]).X >= Map.rightEdge ||
                     (blocks[0].pos + nextPositions[i]).Y > Map.bottomEdge) return false;
             }
-            for (int j = 0; j < map.fixedBlocks.Count; j++)
-                if (blocks[0].pos == map.fixedBlocks[j].pos) return false;
-            for (int i = 1; i < blocks.Count; i++)
+            for (int i = 0; i < nextPositions.Length; i++)
             {
                 for (int j = 0; j < map.fixedBlocks.Count; j++)
                 {
@@ -162,14 +159,10 @@ namespace 俄罗斯方块
         // 判断方块是否可以移动
         public bool CanLeftMove(Map map)
         {
-            // 定义向左的单位向量
-            Position left = new Position(-2, 0);
-
             for (int i = 0; i < blocks.Count; i++)
             {
                 if ((blocks[i].pos + left).X < Map.leftEdge ||
-                    (blocks[i].pos + left).X >= Map.rightEdge ||
-                    (blocks[i].pos + left).Y > Map.bottomEdge) return false;
+                    (blocks[i].pos + left).X >= Map.rightEdge) return false;
             }
             for (int i = 0; i < blocks.Count; i++)
             {
@@ -181,22 +174,35 @@ namespace 俄罗斯方块
             }
             return true;
         }
-        public bool CanRighttMove(Map map)
+        public bool CanRightMove(Map map)
         {
-            // 定义向左的单位向量
-            Position right = new Position(2, 0);
 
             for (int i = 0; i < blocks.Count; i++)
             {
                 if ((blocks[i].pos + right).X < Map.leftEdge ||
-                    (blocks[i].pos + right).X >= Map.rightEdge ||
-                    (blocks[i].pos + right).Y > Map.bottomEdge) return false;
+                    (blocks[i].pos + right).X >= Map.rightEdge) return false;
             }
             for (int i = 0; i < blocks.Count; i++)
             {
                 for (int j = 0; j < map.fixedBlocks.Count; j++)
                 {
                     if ((blocks[i].pos + right) == map.fixedBlocks[j].pos)
+                        return false;
+                }
+            }
+            return true;
+        }
+        public bool CanDownMove(Map map)
+        {
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                if (blocks[i].pos.Y + 1 > Map.bottomEdge) return false;
+            }
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                for (int j = 0; j < map.fixedBlocks.Count; j++)
+                {
+                    if ((blocks[i].pos + down) == map.fixedBlocks[j].pos)
                         return false;
                 }
             }
@@ -257,8 +263,6 @@ namespace 俄罗斯方块
             // 先擦除上一次的方块
             RemoveLastBlock();
 
-            // 定义向左的单位向量
-            Position left = new Position(-2, 0);
             // 更新方块的位置
             for (int i = 0; i < blocks.Count; i++)
             {
@@ -275,8 +279,6 @@ namespace 俄罗斯方块
             // 先擦除上一次的方块
             RemoveLastBlock();
 
-            // 定义向右的单位向量
-            Position right = new Position(2, 0);
             // 更新方块的位置
             for (int i = 0; i < blocks.Count; i++)
             {
@@ -285,6 +287,31 @@ namespace 俄罗斯方块
 
             // 重新绘制方块
             Draw();
+        }
+
+        // 方块自动向下移动
+        public void autoDownMove()
+        {
+            // 先擦除上一次的方块
+            RemoveLastBlock();
+
+            // 更新方块的位置
+            for (int i = 0; i < blocks.Count(); i++)
+            {
+                ++blocks[i].pos.Y;
+            }
+
+            Draw();
+        }
+
+        // 方块固定
+        public void FixBlock(Map map)
+        {
+            foreach (var block in blocks)
+            {
+                block.ChangeType(E_DrawObjectType.FixedBlock);
+                map.AddFixedBlock(block);
+            }
         }
     }
 }

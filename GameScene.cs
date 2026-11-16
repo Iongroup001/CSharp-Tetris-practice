@@ -45,7 +45,7 @@ namespace 俄罗斯方块
                                 blockWorker.LeftRotate();
                             break;
                         case ConsoleKey.E:
-                            if (blockWorker.CanLeftRotate(map))
+                            if (blockWorker.CanRightRotate(map))
                                 blockWorker.RightRotate();
                             break;
                         case ConsoleKey.A:
@@ -53,7 +53,7 @@ namespace 俄罗斯方块
                                 blockWorker.LeftMove();
                             break;
                         case ConsoleKey.D:
-                            if (blockWorker.CanRighttMove(map))
+                            if (blockWorker.CanRightMove(map))
                                 blockWorker.RightMove();
                             break;
                     }
@@ -66,10 +66,17 @@ namespace 俄罗斯方块
             lock (this)
             {
                 map.Draw();
-                blockWorker.Draw();
+                if (blockWorker.CanDownMove(map))
+                    blockWorker.autoDownMove();
+                else
+                {
+                    blockWorker.FixBlock(map);
+                    blockWorker = new BlockWorker();
+                }
+                    
             }
 
-            Thread.Sleep(333);
+            Thread.Sleep(200);
         }
     }
 }

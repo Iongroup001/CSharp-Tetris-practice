@@ -11,14 +11,19 @@ namespace 俄罗斯方块
     {
         private Map map;
         private BlockWorker blockWorker;
+        private long lastTime;
+        private int min;
+        private int sec;
+        private int score;
 
         public GameScene()
         {
-            // 初始化计时器
-            Timer.Reset();
-            Timer.Start();
-            Information.lastTime = Timer.ElapsedMilliseconds;
             Console.Clear();
+            Timer.Start();
+            lastTime = 0;
+            min = 0;
+            sec = 0;
+            score = 0;
 
             // 初始化地图
             map = new Map();
@@ -28,6 +33,8 @@ namespace 俄罗斯方块
 
             // 订阅事件
             InputThread.Instance.inputEvent += InputCheckThread;
+            InfoThread.Info.infoEvent += TimerThread;
+            InfoThread.Info.infoEvent += ScoreThread;
         }
 
         // 输入检测线程
@@ -65,6 +72,44 @@ namespace 俄罗斯方块
             }
         }
 
+        // 计时器
+        public void TimerThread()
+        {
+            lock (this)
+            {
+                //更新计时器
+                if (Timer.ElapsedMilliseconds - lastTime >= 1000)
+                {
+                    if (sec == 59)
+                    {
+                        sec = 0;
+                        min++;
+                    }
+                    else
+                        sec++;
+                    Console.SetCursorPosition(15, 25);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"{min:D2}:{sec:D2}");
+                    lastTime = Timer.ElapsedMilliseconds;
+                }
+            }
+        }
+
+        // 分数计数
+        public void ScoreThread()
+        {
+            lock(this)
+            {
+                if (score != map.DelLineCount * 10)
+                {
+                    score = map.DelLineCount * 10;
+                    Console.SetCursorPosition(33, 25);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"{score}");
+                }
+            }
+        }
+
         public void Update()
         {
             lock (this)
@@ -82,6 +127,8 @@ namespace 俄罗斯方块
             if (map.IsFull())
             {
                 InputThread.Instance.inputEvent -= InputCheckThread;
+                InfoThread.Info.infoEvent -= TimerThread;
+                InfoThread.Info.infoEvent -= ScoreThread;
                 Game.ChangeScene(E_SceneType.EndScene);
             }
 

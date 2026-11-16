@@ -22,7 +22,6 @@ namespace 俄罗斯方块
                     //切换到游戏场景
                     Game.ChangeScene(E_SceneType.GameScene);
                     Game.timeDelay = Game.originTimeDelay;
-                    Information.score = 0;
                     break;
                 case 1:
                     //退出游戏

@@ -10,11 +10,6 @@ namespace 俄罗斯方块
     {
         public EndScene()
         {
-            Timer.Stop();
-            Timer.Reset();
-            Information.lastTime = Timer.ElapsedMilliseconds;
-            Information.sec = 0;
-            Information.min = 0;
             Console.Clear();
             strTitle = "游戏结束";
             strOne = "回到开始界面";

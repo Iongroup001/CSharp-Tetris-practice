@@ -14,10 +14,12 @@ namespace 俄罗斯方块
         public static int topEdge = 1;
         public static int bottomEdge = 20;
         private int[] lineRecord;
+        private int delLineCount;
 
         public Map()
         {
             lineRecord = new int[bottomEdge + 1];
+            delLineCount = 0;
 
             for (int i = leftEdge - 2; i <= rightEdge; i += 2)
             {
@@ -34,6 +36,13 @@ namespace 俄罗斯方块
             {
                 item.Draw();
             }
+
+            // 信息输出
+            Console.SetCursorPosition(5, 25);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("游戏时间：00:00");
+            Console.SetCursorPosition(27, 25);
+            Console.Write("分数：0");
         }
 
         //地图周围的墙壁
@@ -107,6 +116,8 @@ namespace 俄罗斯方块
                     for (int j = 0; j < lineRecord.Length - 1; j++)
                         lineRecord[j] = lineRecord[j + 1];
 
+                    delLineCount++;
+
                     // 递归检查是否还有可移除行
                     RemoveFixedBlock();
                     break;
@@ -128,6 +139,11 @@ namespace 俄罗斯方块
             if (lineRecord[bottomEdge] > 0)
                 return true;
             return false;
+        }
+
+        public int DelLineCount
+        {
+            get { return delLineCount; }
         }
     }
 }

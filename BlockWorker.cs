@@ -38,7 +38,8 @@ namespace 俄罗斯方块
             foreach (var block in blocks)
             {
                 block.color = color;
-                block.Draw();
+                if (block.pos.Y >= 0)
+                    block.Draw();
             }
         }
 
@@ -50,7 +51,7 @@ namespace 俄罗斯方块
             blocks = new List<DrawObject>()
             {
                 // 生成一个方块对象，该方块的位置为原点位置，类型为随机生成的类型
-                new DrawObject(new Position(20, 4), type),
+                new DrawObject(new Position(22, -3), type),
 
                 new DrawObject(type),
                 new DrawObject(type),
@@ -88,7 +89,8 @@ namespace 俄罗斯方块
             if (blocks == null) return;
             foreach (var block in blocks)
             {
-                block.ClearDraw();
+                if (block.pos.Y >= 0)
+                    block.ClearDraw();
             }
         }
 
@@ -307,11 +309,7 @@ namespace 俄罗斯方块
         // 方块固定
         public void FixBlock(Map map)
         {
-            foreach (var block in blocks)
-            {
-                block.ChangeType(E_DrawObjectType.FixedBlock);
-                map.AddFixedBlock(block);
-            }
+            map.AddFixedBlock(blocks);
         }
     }
 }

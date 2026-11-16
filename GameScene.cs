@@ -56,6 +56,10 @@ namespace 俄罗斯方块
                             if (blockWorker.CanRightMove(map))
                                 blockWorker.RightMove();
                             break;
+                        case ConsoleKey.S:
+                            if (blockWorker.CanDownMove(map))
+                                blockWorker.autoDownMove();
+                            break;
                     }
                 }
             }
@@ -74,6 +78,11 @@ namespace 俄罗斯方块
                     blockWorker = new BlockWorker();
                 }
                     
+            }
+            if (map.IsFull())
+            {
+                InputThread.Instance.inputEvent -= InputCheckThread;
+                Game.ChangeScene(E_SceneType.EndScene);
             }
 
             Thread.Sleep(200);

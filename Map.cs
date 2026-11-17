@@ -113,6 +113,7 @@ namespace 俄罗斯方块
                         fixedBlocks.Remove(delBlocks[j]);
 
                     // 记录数组迁移
+                    lineRecord[i] = 0;
                     for (int j = 0; j < lineRecord.Length - 1; j++)
                         lineRecord[j] = lineRecord[j + 1];
 
